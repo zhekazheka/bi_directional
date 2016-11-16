@@ -38,7 +38,7 @@ void Game::gameLoop()
     
     _player = Player(graphics, 200, 200);
     
-    _level = Level("map01", Vector2(100, 100), graphics);
+    _level = Level("map_1", Vector2(100, 100), graphics);
     
     int LAST_UPDATE_TIME = SDL_GetTicks();
     

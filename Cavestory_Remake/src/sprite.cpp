@@ -28,6 +28,8 @@ Sprite::Sprite(Graphics &graphics, const std::string &filePath, int sourceX, int
     {
         printf("\nError: Unable to load image\n");
     }
+    
+    _boundingBox = Rectangle(_x, _y, width * globals::SPRITE_SCALE, height * globals::SPRITE_SCALE);
 }
 
 Sprite::~Sprite()
@@ -44,5 +46,36 @@ void Sprite::draw(Graphics &graphics, int x, int y)
 
 void Sprite::update()
 {
-    
+    _boundingBox = Rectangle(_x, _y, _sourceRect.w * globals::SPRITE_SCALE, _sourceRect.h * globals::SPRITE_SCALE);
 }
+
+const Rectangle Sprite::getBoundingBox() const
+{
+    return _boundingBox;
+}
+
+const sides::Side Sprite::getCollisionSide(Rectangle &other) const
+{
+    int amountRight = abs(_boundingBox.getRight() - other.getLeft());
+    int amountLeft = abs(other.getRight() - _boundingBox.getLeft());
+    int amountTop = abs(other.getBottom() - _boundingBox.getTop());
+    int amountBottom = abs(_boundingBox.getBottom() - other.getTop());
+    
+    int vals[4] = { amountRight, amountLeft, amountTop, amountBottom };
+    int min = vals[0];
+    for (int i = 0; i < 4; ++i)
+    {
+        if(vals[i] < min)
+        {
+            min = vals[i];
+        }
+    }
+    
+    return
+        min == amountRight ? sides::RIGHT :
+        min == amountLeft ? sides::LEFT :
+        min == amountTop ? sides::TOP :
+        min == amountBottom ? sides::BOTTOM :
+        sides::NONE;
+}
+

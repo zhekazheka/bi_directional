@@ -12,6 +12,9 @@
 #include <string>
 #include <SDL2/SDL.h>
 
+#include "globals.h"
+#include "rectangle.hpp"
+
 class Graphics;
 
 class Sprite
@@ -26,9 +29,14 @@ public:
     virtual void update();
     virtual void draw(Graphics &graphics, int x, int y);
     
+    const Rectangle getBoundingBox() const;
+    const sides::Side getCollisionSide(Rectangle &other) const;
+    
 protected:
     SDL_Rect _sourceRect;
     SDL_Texture* _spriteSheet;
+    
+    Rectangle _boundingBox;
     
     float _x, _y;
 };

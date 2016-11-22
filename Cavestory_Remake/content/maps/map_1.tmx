@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="16" tilewidth="16" tileheight="16" nextobjectid="1">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="16" tilewidth="16" tileheight="16" nextobjectid="31">
  <tileset firstgid="1" name="PrtCave" tilewidth="16" tileheight="16" tilecount="80" columns="16">
   <image source="../tilesets/PrtCave.png" width="256" height="80"/>
  </tileset>
@@ -651,4 +651,27 @@
    <tile gid="0"/>
   </data>
  </layer>
+ <objectgroup name="Collisions">
+  <object id="2" x="144.916" y="16.9275" width="14.8631" height="14.4503"/>
+  <object id="4" x="144.09" y="64.8198" width="15.6889" height="14.4503"/>
+  <object id="5" x="112.299" y="80.9215" width="79.2701" height="14.4503"/>
+  <object id="7" x="47.4795" y="47.4795" width="31.7906" height="96.1975"/>
+  <object id="9" x="46.2409" y="126.75" width="67.297" height="16.1017"/>
+  <object id="11" x="128.401" y="144.503" width="47.0666" height="14.4503"/>
+  <object id="12" x="192.395" y="144.916" width="15.276" height="14.0374"/>
+  <object id="13" x="208.497" y="128.401" width="30.552" height="14.8631"/>
+  <object id="15" x="239.874" y="95.7846" width="15.276" height="33.0292"/>
+  <object id="16" x="96.6104" y="145.328" width="14.8631" height="14.0374"/>
+  <object id="18" x="81.7472" y="146.98" width="14.4503" height="47.0666"/>
+  <object id="22" x="92.8946" y="187.854" width="116.015" height="18.5789"/>
+  <object id="23" x="208.497" y="156.476" width="12.7988" height="33.4421"/>
+  <object id="26" x="225.011" y="80.5086" width="30.552" height="14.8631"/>
+  <object id="27" x="256.802" y="0.412865" width="9.90876" height="94.1332"/>
+  <object id="28" x="176.468" y="24.1661" width="17.3403" height="42.9379"/>
+ </objectgroup>
+ <objectgroup color="#00ff00" name="SpawnPoints">
+  <object id="30" name="player" x="126.337" y="69.3613" width="4.12865" height="3.71578">
+   <ellipse/>
+  </object>
+ </objectgroup>
 </map>

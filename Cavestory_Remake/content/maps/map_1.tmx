@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="16" tilewidth="16" tileheight="16" nextobjectid="31">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="16" tilewidth="16" tileheight="16" nextobjectid="47">
  <tileset firstgid="1" name="PrtCave" tilewidth="16" tileheight="16" tilecount="80" columns="16">
   <image source="../tilesets/PrtCave.png" width="256" height="80"/>
  </tileset>
@@ -668,10 +668,31 @@
   <object id="26" x="225.011" y="80.5086" width="30.552" height="14.8631"/>
   <object id="27" x="256.802" y="0.412865" width="9.90876" height="94.1332"/>
   <object id="28" x="176.468" y="24.1661" width="17.3403" height="42.9379"/>
+  <object id="38" x="108.5" y="20.5" width="36" height="11.5"/>
+  <object id="39" x="79" y="33" width="32.5" height="18"/>
+  <object id="40" x="160" y="27.5" width="16" height="4.5"/>
+  <object id="42" x="192.5" y="82" width="31.5" height="7"/>
  </objectgroup>
  <objectgroup color="#00ff00" name="SpawnPoints">
-  <object id="30" name="player" x="126.337" y="69.3613" width="4.12865" height="3.71578">
+  <object id="30" name="player" x="149.837" y="174.861" width="4.12865" height="3.71578">
    <ellipse/>
+  </object>
+ </objectgroup>
+ <objectgroup name="Slopes">
+  <object id="34" x="79.625" y="116.875">
+   <polyline points="0,0 18,9.625"/>
+  </object>
+  <object id="36" x="240.25" y="122.5">
+   <polyline points="0,0 -17.375,5.875"/>
+  </object>
+  <object id="37" x="159.625" y="64.25">
+   <polyline points="0,0 16.75,-5.375"/>
+  </object>
+  <object id="45" x="97" y="174.5">
+   <polyline points="0,0 24,13"/>
+  </object>
+  <object id="46" x="208" y="171">
+   <polyline points="0,0 -26.5,16.5"/>
   </object>
  </objectgroup>
 </map>

@@ -13,6 +13,7 @@
 #include "globals.h"
 
 class Graphics;
+class Slope;
 
 class Player : public AnimatedSprite
 {
@@ -26,11 +27,13 @@ public:
     void moveLeft();
     void moveRight();
     void stopMoving();
+    void jump();
     
     virtual void setupAnimations();
     virtual void animationDone(std::string currentAnimation);
     
     void handleTileCollisions(std::vector<Rectangle> &others);
+    void handleSlopeCollisions(std::vector<Slope> &others);
     
     const float getX() const;
     const float getY() const;

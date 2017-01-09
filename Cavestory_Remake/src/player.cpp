@@ -8,9 +8,11 @@
 
 #include "player.hpp"
 #include "graphics.h"
+#include "slope.hpp"
 
 namespace player_constants {
     const float WALK_SPEED = 0.2f;
+    const float JUMP_SPEED = 0.7f;
     
     const float GRAVITY = 0.002f;
     const float GRAVITY_CAP = 0.8f;
@@ -79,6 +81,16 @@ void Player::stopMoving()
     playAnimation(_facing == RIGHT ? "IdleRight" : "IdleLeft");
 }
 
+void Player::jump()
+{
+    if(_grounded)
+    {
+        _dy = 0;
+        _dy -= player_constants::JUMP_SPEED;
+        _grounded = false;
+    }
+}
+
 void Player::handleTileCollisions(std::vector<Rectangle> &others)
 {
     // Figure out what side is player collision on and move to accordingly
@@ -90,8 +102,13 @@ void Player::handleTileCollisions(std::vector<Rectangle> &others)
         {
             switch (collisionSide) {
                 case sides::TOP:
-                    _y = otherRect.getBottom() + 1;
                     _dy = 0;
+                    _y = otherRect.getBottom() + 1;
+                    if(_grounded)
+                    {
+                        _dx = 0;
+                        _x -= _facing == RIGHT ? 1.0f : -1.0f;
+                    }
                     break;
                     
                 case sides::BOTTOM:
@@ -111,6 +128,33 @@ void Player::handleTileCollisions(std::vector<Rectangle> &others)
                 default:
                     break;
             }
+        }
+    }
+}
+
+//void handleSlopeCollisions
+//Handles collisions with ALL slopes the player is colliding with
+void Player::handleSlopeCollisions(std::vector<Slope> &others)
+{
+    for (int i = 0; i < others.size(); ++i)
+    {
+        //Calculate where on the slope the player's bottom center is touching
+        //and use y=mx+b to figure out the y position to place him at
+        //First calculate "b" (slope intercept) using one of the points (b = y - mx)
+        Slope slope = others.at(i);
+        int b = slope.getP1().y - slope.getSlope() * fabs((float)slope.getP1().x);
+        
+        //Now get player's center x
+        int centerX = _boundingBox.getCenterX();
+        
+        //Now pass that X into the equation y = mx + b (using our newly found b and x) to get the new y position
+        int newY = (slope.getSlope() * centerX) + b - 8; // 8 temp and magic for now
+        
+        //Re-position the player to the correct "y"
+        if(_grounded)
+        {
+            _y = newY - _boundingBox.getHeight();
+            _grounded = true;
         }
     }
 }

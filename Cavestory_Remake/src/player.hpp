@@ -27,6 +27,11 @@ public:
     void moveLeft();
     void moveRight();
     void stopMoving();
+    void lookUp();
+    void stopLookingUp();
+    void lookDown();
+    void stopLookingDown();
+    
     void jump();
     
     virtual void setupAnimations();
@@ -44,6 +49,9 @@ private:
     Direction _facing;
     
     bool _grounded;
+    
+    bool _lookingUp;
+    bool _lookingDown;
 };
 
 #endif /* player_hpp */

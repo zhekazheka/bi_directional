@@ -80,6 +80,26 @@ void Game::gameLoop()
             _player.moveRight();
         }
         
+        if(input.isKeyHeld(SDL_SCANCODE_UP))
+        {
+            _player.lookUp();
+        }
+        
+        if(input.isKeyHeld(SDL_SCANCODE_DOWN))
+        {
+            _player.lookDown();
+        }
+        
+        if(input.wasKeyRelease(SDL_SCANCODE_UP))
+        {
+            _player.stopLookingUp();
+        }
+        
+        if(input.wasKeyRelease(SDL_SCANCODE_DOWN))
+        {
+            _player.stopLookingDown();
+        }
+        
         if(input.wasKeyPressed(SDL_SCANCODE_SPACE))
         {
             _player.jump();

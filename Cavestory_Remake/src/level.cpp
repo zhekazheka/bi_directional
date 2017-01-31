@@ -20,10 +20,10 @@
 using namespace tinyxml2;
 
 namespace level_constants {
-    const std::string LEVEL_SPRITE_SHEET = "/Users/zhekazheka/Development/HandMade/Cavestory_Remake/Cavestory_Remake/content/backgrounds/bkBlue.png";
+    const std::string LEVEL_SPRITE_SHEET = "/Users/zhekazheka/Documents/HandMade/Cavestory_Remake/Cavestory_Remake/content/backgrounds/bkBlue.png";
     
-    const std::string MAPS = "/Users/zhekazheka/Development/HandMade/Cavestory_Remake/Cavestory_Remake/content/maps/";
-    const std::string TILESETS = "/Users/zhekazheka/Development/HandMade/Cavestory_Remake/Cavestory_Remake/content/tilesets/";
+    const std::string MAPS = "/Users/zhekazheka/Documents/HandMade/Cavestory_Remake/Cavestory_Remake/content/maps/";
+    const std::string TILESETS = "/Users/zhekazheka/Documents/HandMade/Cavestory_Remake/Cavestory_Remake/content/tilesets/";
 }
 
 
@@ -88,6 +88,41 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
             SDL_Texture* tex = SDL_CreateTextureFromSurface(graphics.getRenderer(), graphics.loadImage(ss.str()));
             _tilesets.push_back(Tileset(tex, firstGid));
             
+            // get all our tile animations for that set
+            XMLElement* pTileA = pTileset->FirstChildElement("tile");
+            if(pTileA != NULL)
+            {
+                while (pTileA)
+                {
+                    AnimatedTileInfo tileInfo;
+                    tileInfo.startTileId = pTileA->IntAttribute("id") + firstGid;
+                    tileInfo.tilesetFirstGid = firstGid;
+                    
+                    XMLElement* pAnimation = pTileA->FirstChildElement("animation");
+                    if(pAnimation != NULL)
+                    {
+                        while (pAnimation)
+                        {
+                            XMLElement* pFrame = pAnimation->FirstChildElement("frame");
+                            if(pFrame != NULL)
+                            {
+                                while (pFrame)
+                                {
+                                    tileInfo.TileIds.push_back(pFrame->IntAttribute("tileid") + firstGid);
+                                    tileInfo.duration = pFrame->IntAttribute("duration");
+                                    pFrame = pFrame->NextSiblingElement("frame");
+                                }
+                            }
+                            
+                            pAnimation = pAnimation->NextSiblingElement("animation");
+                        }
+                    }
+                    
+                    _animatedTileInfos.push_back(tileInfo);
+                    pTileA = pTileA->NextSiblingElement("tile");
+                }
+            }
+            
             pTileset = pTileset->NextSiblingElement("tileset");
         }
     }
@@ -113,14 +148,18 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
                             Tileset tls;
                             
                             int gid = pTile->IntAttribute("gid");
+                            int closest = 0;
                             if(gid != 0)
                             {
                                 for (int i = 0; i < _tilesets.size(); ++i)
                                 {
                                     if(_tilesets[i].FirstGid <= gid)
                                     {
-                                        tls = _tilesets[i];
-                                        break;
+                                        if(_tilesets[i].FirstGid >= closest)
+                                        {
+                                            closest = _tilesets[i].FirstGid;
+                                            tls = _tilesets[i];
+                                        }
                                     }
                                 }
                                 
@@ -142,20 +181,38 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
                             Vector2 finalTilePosition = Vector2(xx, yy);
                             
                             // Calculate the position of the tile on the tileset
-                            int tilesetWidth, tilesetHeight;
-                            SDL_QueryTexture(tls.Texture, NULL, NULL, &tilesetWidth, &tilesetHeight);
-                            int tsxx = gid % (tilesetWidth / _tileSize.x) - 1;
-                            tsxx *= _tileSize.x;
+                            Vector2 finalTilesetPosition = getTilesetPosition(tls, gid, _tileSize.x, _tileSize.y);
                             
-                            int tsyy = 0;
-                            int amount = (gid / (tilesetWidth / _tileSize.x));
-                            tsyy = _tileSize.y * amount;
-                            Vector2 finalTilesetPosition = Vector2(tsxx, tsyy);
+                            bool isAnimatedTile = false;
+                            AnimatedTileInfo tileInfo;
+                            for (int i = 0; i < _animatedTileInfos.size(); ++i)
+                            {
+                                if(_animatedTileInfos.at(i).startTileId == gid)
+                                {
+                                    tileInfo = _animatedTileInfos.at(i);
+                                    isAnimatedTile = true;
+                                    break;
+                                }
+                            }
                             
-                            Tile tile(tls.Texture, Vector2(_tileSize.x, _tileSize.y),
-                                      finalTilesetPosition, finalTilePosition);
-                            
-                            _tileList.push_back(tile);
+                            if(isAnimatedTile)
+                            {
+                                std::vector<Vector2> tilesetPositions;
+                                for (int i = 0; i < tileInfo.TileIds.size(); ++i)
+                                {
+                                    tilesetPositions.push_back(getTilesetPosition(tls, tileInfo.TileIds.at(i), _tileSize.x, _tileSize.y));
+                                }
+                                
+                                AnimatedTile animatedTile(tilesetPositions, tileInfo.duration, tls.Texture, _tileSize, finalTilePosition);
+                                _animatedTileList.push_back(animatedTile);
+                            }
+                            else
+                            {
+                                Tile tile(tls.Texture, Vector2(_tileSize.x, _tileSize.y),
+                                          finalTilesetPosition, finalTilePosition);
+                                
+                                _tileList.push_back(tile);
+                            }
                             
                             ++tileCounter;
                             pTile = pTile->NextSiblingElement("tile");
@@ -276,7 +333,10 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
 
 void Level::update(float elapsedTime)
 {
-    
+    for (int i = 0; i < _animatedTileList.size(); ++i)
+    {
+        _animatedTileList.at(i).update(elapsedTime);
+    }
 }
 
 void Level::draw(Graphics &graphics)
@@ -301,6 +361,11 @@ void Level::draw(Graphics &graphics)
     for (int i = 0; i < _tileList.size(); ++i)
     {
         _tileList[i].draw(graphics);
+    }
+    
+    for (int i = 0; i < _animatedTileList.size(); ++i)
+    {
+        _animatedTileList.at(i).draw(graphics);
     }
 }
 
@@ -335,4 +400,17 @@ std::vector<Slope> Level::checkSlopeCollisions(const Rectangle &other)
 const Vector2 Level::getPlayerSpawnPoint() const
 {
     return _spawnPoint;
+}
+
+Vector2 Level::getTilesetPosition(Tileset tls, int gid, int tileWidth, int tileHeight)
+{
+    int tilesetWidth, tilesetHeight;
+    SDL_QueryTexture(tls.Texture, NULL, NULL, &tilesetWidth, &tilesetHeight);
+    int tsxx = gid % (tilesetWidth / _tileSize.x) - 1;
+    tsxx *= _tileSize.x;
+    
+    int tsyy = 0;
+    int amount = ((gid-tls.FirstGid) / (tilesetWidth / _tileSize.x));
+    tsyy = _tileSize.y * amount;
+    return Vector2(tsxx, tsyy);
 }

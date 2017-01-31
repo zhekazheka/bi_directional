@@ -17,7 +17,7 @@ namespace player_constants {
     const float GRAVITY = 0.002f;
     const float GRAVITY_CAP = 0.8f;
     
-    const std::string CHARACTER_SPRITE_SHEET = "/Users/zhekazheka/Development/HandMade/Cavestory_Remake/Cavestory_Remake/content/sprites/MyChar.png";
+    const std::string CHARACTER_SPRITE_SHEET = "/Users/zhekazheka/Documents/HandMade/Cavestory_Remake/Cavestory_Remake/content/sprites/MyChar.png";
 }
 
 Player::Player()

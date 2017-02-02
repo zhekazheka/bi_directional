@@ -20,6 +20,7 @@ Graphics::Graphics()
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't create window and renderer: %s", SDL_GetError());
     }
     
+    SDL_RenderSetLogicalSize(_renderer, 640, 480);
     SDL_SetWindowTitle(_window, "Cavestory Remake");
 }
 

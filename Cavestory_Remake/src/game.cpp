@@ -39,6 +39,7 @@ void Game::gameLoop()
     _level = Level("map_1", Vector2(100, 100), graphics);
     
     _player = Player(graphics, _level.getPlayerSpawnPoint());
+    _hud = HUD(graphics, _player);
     
     
     int LAST_UPDATE_TIME = SDL_GetTicks();
@@ -123,6 +124,7 @@ void Game::update(float elapsedTime)
 {
     _level.update(elapsedTime);
     _player.update(elapsedTime);
+    _hud.update(elapsedTime);
     
     std::vector<Rectangle> others = _level.checkTileCollisions(_player.getBoundingBox());    
     if(others.size() > 0)
@@ -143,6 +145,8 @@ void Game::draw(Graphics &graphics)
     
     _level.draw(graphics);
     _player.draw(graphics);
+    
+    _hud.draw(graphics);
     
     graphics.flip();
 }

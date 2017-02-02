@@ -11,6 +11,7 @@
 
 #include "player.hpp"
 #include "level.hpp"
+#include "hud.hpp"
 
 class Graphics;
 
@@ -28,6 +29,8 @@ private:
     Player _player;
     
     Level _level;
+    
+    HUD _hud;
 };
 
 #endif /* Game_hpp */

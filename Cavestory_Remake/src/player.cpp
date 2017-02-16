@@ -9,6 +9,8 @@
 #include "player.hpp"
 #include "graphics.h"
 #include "slope.hpp"
+#include "door.hpp"
+#include "level.hpp"
 
 namespace player_constants {
     const float WALK_SPEED = 0.2f;
@@ -224,6 +226,17 @@ void Player::handleSlopeCollisions(std::vector<Slope> &others)
         {
             _y = newY - _boundingBox.getHeight();
             _grounded = true;
+        }
+    }
+}
+
+void Player::handleDoorCollision(std::vector<Door> &others, Level &level, Graphics &graphics)
+{
+    for(int i = 0; i < others.size(); ++i)
+    {
+        if(_grounded && _lookingDown)
+        {
+            level = Level(others.at(i).getDestination(), graphics);
         }
     }
 }

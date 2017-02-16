@@ -34,6 +34,8 @@ public:
     
     void setSourceRectX(int value);
     void setSourceRectY(int value);
+    void setSourceRectW(int value);
+    void setSourceRectH(int value);
     
     const inline float getX() const
     {

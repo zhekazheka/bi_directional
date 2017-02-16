@@ -12,8 +12,7 @@
 #include "player.hpp"
 #include "level.hpp"
 #include "hud.hpp"
-
-class Graphics;
+#include "graphics.h"
 
 class Game
 {
@@ -31,6 +30,8 @@ private:
     Level _level;
     
     HUD _hud;
+    
+    Graphics _graphics;
 };
 
 #endif /* Game_hpp */

@@ -84,6 +84,8 @@ public:
         return _x >= 0 && _y >= 0 && _width >= 0 && _height >= 0;
     }
     
+    const inline Rectangle getRect() const { return *this; }
+    
 private:
     int _x, _y, _width, _height;
 };

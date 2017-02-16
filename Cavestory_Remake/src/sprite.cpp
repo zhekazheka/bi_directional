@@ -89,3 +89,13 @@ void Sprite::setSourceRectY(int value)
     _sourceRect.y = value;
 }
 
+void Sprite::setSourceRectW(int value)
+{
+    _sourceRect.w = value;
+}
+
+void Sprite::setSourceRectH(int value)
+{
+    _sourceRect.h = value;
+}
+

@@ -32,9 +32,8 @@ Level::Level()
     
 }
 
-Level::Level(std::string mapName, Vector2 spawnPoint, Graphics &graphics) :
+Level::Level(std::string mapName, Graphics &graphics) :
             _mapName(mapName),
-            _spawnPoint(spawnPoint),
             _size(Vector2(0, 0))
 {
     this->loadMap(mapName, graphics);
@@ -325,6 +324,53 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
                     }
                 }
             }
+            else if(ss.str() == "Doors")
+            {
+                XMLElement* pObject = pObjectGroup->FirstChildElement("object");
+                if(pObjectGroup != NULL)
+                {
+                    while(pObject)
+                    {
+                        float x = pObject->FloatAttribute("x");
+                        float y = pObject->FloatAttribute("y");
+                        float w = pObject->FloatAttribute("width");
+                        float h = pObject->FloatAttribute("height");
+                        Rectangle rect = Rectangle(x, y, w, h);
+                        
+                        XMLElement* pProperties = pObject->FirstChildElement("properties");
+                        if(pProperties != NULL)
+                        {
+                            while(pProperties)
+                            {
+                                XMLElement* pProperty = pProperties->FirstChildElement("property");
+                                if(pProperty != NULL)
+                                {
+                                    while (pProperty)
+                                    {
+                                        const char* name = pProperty->Attribute("name");
+                                        std::stringstream ss;
+                                        ss << name;
+                                        if(ss.str() == "destination")
+                                        {
+                                            const char* value = pProperty->Attribute("value");
+                                            std::stringstream ss2;
+                                            ss2 << value;
+                                            Door door = Door(rect, ss2.str());
+                                            _doorList.push_back(door);
+                                        }
+                                        
+                                        pProperty = pProperty->NextSiblingElement("property");
+                                    }
+                                }
+                                
+                                pProperties = pProperties->NextSiblingElement("properties");
+                            }
+                        }
+                        
+                        pObject = pObject->NextSiblingElement("object");
+                    }
+                }
+            }
             
             pObjectGroup = pObjectGroup->NextSiblingElement("objectgroup");
         }
@@ -391,6 +437,20 @@ std::vector<Slope> Level::checkSlopeCollisions(const Rectangle &other)
         if(_slopes.at(i).collideWith(other))
         {
             others.push_back(_slopes.at(i));
+        }
+    }
+    
+    return others;
+}
+
+std::vector<Door> Level::checkDoorCollisions(const Rectangle &other)
+{
+    std::vector<Door> others;
+    for (int i = 0; i < _doorList.size(); ++i)
+    {
+        if(_doorList.at(i).collideWith(other))
+        {
+            others.push_back(_doorList.at(i));
         }
     }
     

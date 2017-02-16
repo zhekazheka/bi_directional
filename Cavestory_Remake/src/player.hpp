@@ -14,6 +14,8 @@
 
 class Graphics;
 class Slope;
+class Door;
+class Level;
 
 class Player : public AnimatedSprite
 {
@@ -39,6 +41,7 @@ public:
     
     void handleTileCollisions(std::vector<Rectangle> &others);
     void handleSlopeCollisions(std::vector<Slope> &others);
+    void handleDoorCollision(std::vector<Door> &others, Level &level, Graphics &graphics);
     
     const float getX() const;
     const float getY() const;

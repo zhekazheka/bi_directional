@@ -123,7 +123,7 @@ void Game::gameLoop()
 
 void Game::update(float elapsedTime)
 {
-    _level.update(elapsedTime);
+    _level.update(elapsedTime, _player);
     _player.update(elapsedTime);
     _hud.update(elapsedTime);
     

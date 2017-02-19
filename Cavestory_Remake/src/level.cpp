@@ -10,6 +10,7 @@
 #include "graphics.h"
 #include "tinyxml2.h"
 #include "utils.hpp"
+#include "enemy.hpp"
 
 #include <SDL2/SDL.h>
 
@@ -371,17 +372,46 @@ void Level::loadMap(std::string mapName, Graphics &graphics)
                     }
                 }
             }
+            else if(ss.str() == "enemies")
+            {
+                float x, y;
+                
+                XMLElement* pObject = pObjectGroup->FirstChildElement("object");
+                if(pObject != NULL)
+                {
+                    while (pObject)
+                    {
+                        x = pObject->FloatAttribute("x");
+                        y = pObject->FloatAttribute("y");
+                        
+                        const char* name = pObject->Attribute("name");
+                        std::stringstream ss;
+                        ss << name;
+                        if(ss.str() == "bat")
+                        {
+                            _enemies.push_back(new Bat(graphics, Vector2(floor(x) * globals::SPRITE_SCALE, floor(y) * globals::SPRITE_SCALE)));
+                        }
+                        
+                        pObject = pObject->NextSiblingElement("object");
+                    }
+                }
+            }
             
             pObjectGroup = pObjectGroup->NextSiblingElement("objectgroup");
         }
     }
 }
 
-void Level::update(float elapsedTime)
+void Level::update(float elapsedTime, Player &player)
 {
     for (int i = 0; i < _animatedTileList.size(); ++i)
     {
         _animatedTileList.at(i).update(elapsedTime);
+    }
+    
+    for (int i = 0; i < _enemies.size(); ++i)
+    {
+        _enemies.at(i)->update(elapsedTime, player);
     }
 }
 
@@ -412,6 +442,11 @@ void Level::draw(Graphics &graphics)
     for (int i = 0; i < _animatedTileList.size(); ++i)
     {
         _animatedTileList.at(i).draw(graphics);
+    }
+    
+    for (int i = 0; i < _enemies.size(); ++i)
+    {
+        _enemies.at(i)->draw(graphics);
     }
 }
 

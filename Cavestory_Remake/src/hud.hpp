@@ -20,7 +20,7 @@ public:
     HUD();
     HUD(Graphics& graphics, Player& player);
     
-    void update(float elapsedTime);
+    void update(float elapsedTime, Player &player);
     void draw(Graphics& graphics);
     
 private:

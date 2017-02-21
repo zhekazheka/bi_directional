@@ -21,6 +21,8 @@ public:
     virtual void update(int elapsedTime, Player &player);
     virtual void draw(Graphics &graphics);
     
+    virtual void touchPlayer(Player *player) = 0;
+    
     const inline int getMaxHealth() const { return _maxHealth; }
     const inline int getCurrentHealth() const { return _currentHealth; }
     
@@ -41,11 +43,14 @@ public:
     void update(int elapsedTime, Player &player);
     void draw(Graphics &graphics);
     
+    void touchPlayer(Player *player);
+    
     void setupAnimations();
     void animationDone(std::string currentAnimation);
     
 private:
-    
+    float _startingX, _startingY;
+    bool _shouldMoveUp;
 };
 
 #endif /* enemy_hpp */

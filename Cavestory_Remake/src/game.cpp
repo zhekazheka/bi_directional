@@ -125,7 +125,7 @@ void Game::update(float elapsedTime)
 {
     _level.update(elapsedTime, _player);
     _player.update(elapsedTime);
-    _hud.update(elapsedTime);
+    _hud.update(elapsedTime, _player);
     
     std::vector<Rectangle> others = _level.checkTileCollisions(_player.getBoundingBox());    
     if(others.size() > 0)
@@ -143,6 +143,12 @@ void Game::update(float elapsedTime)
     if(otherDoors.size() > 0)
     {
         _player.handleDoorCollision(otherDoors, _level, _graphics);
+    }
+    
+    std::vector<Enemy*> otherEnemies = _level.checkEnemiesCollisions(_player.getBoundingBox());
+    if(otherEnemies.size() > 0)
+    {
+        _player.handleEnemiesCollision(otherEnemies);
     }
 }
 

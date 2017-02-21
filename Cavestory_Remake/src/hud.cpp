@@ -29,8 +29,9 @@ HUD::HUD(Graphics& graphics, Player& player)
     _dashes = Sprite(graphics, "/Users/zhekazheka/Documents/HandMade/Cavestory_Remake/Cavestory_Remake/content/sprites/TextBox.png", 81, 51, 15, 11, 132, 26);
 }
 
-void HUD::update(float elapsedTime)
+void HUD::update(float elapsedTime, Player &player)
 {
+    _player = player;
     _healthNumber1.setSourceRectX(8 * _player.getCurrentHealth());
     
     // calculate width of health bar

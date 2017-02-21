@@ -31,7 +31,10 @@ void Enemy::draw(Graphics &graphics)
 Bat::Bat() {}
 
 Bat::Bat(Graphics &graphics, Vector2 spawnPoint)
-    : Enemy(graphics, "/Users/zhekazheka/Documents/HandMade/Cavestory_Remake/Cavestory_Remake/content/sprites/NpcCemet.png", 32, 32, 16, 16, spawnPoint, 140)
+    : Enemy(graphics, "/Users/zhekazheka/Documents/HandMade/Cavestory_Remake/Cavestory_Remake/content/sprites/NpcCemet.png", 32, 32, 16, 16, spawnPoint, 140),
+    _startingX(spawnPoint.x),
+    _startingY(spawnPoint.y),
+    _shouldMoveUp(rand() % 2 == 0)
 {
     setupAnimations();
     playAnimation("FlyLeft");
@@ -42,12 +45,24 @@ void Bat::update(int elapsedTime, Player &player)
     _direction = player.getX() > _x ? RIGHT : LEFT;
     playAnimation(_direction == RIGHT ? "FlyRight" : "FlyLeft");
     
+    // move up or down
+    _y += _shouldMoveUp ? -0.2 : 0.2;
+    if(_y > (_startingY + 20) || _y < (_startingY - 20))
+    {
+        _shouldMoveUp = !_shouldMoveUp;
+    }
+    
     Enemy::update(elapsedTime, player);
 }
 
 void Bat::draw(Graphics &graphics)
 {
     Enemy::draw(graphics);
+}
+
+void Bat::touchPlayer(Player *player)
+{
+    player->gainHealth(-1);
 }
 
 void Bat::setupAnimations()

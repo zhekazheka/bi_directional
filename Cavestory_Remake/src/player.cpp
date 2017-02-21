@@ -11,6 +11,7 @@
 #include "slope.hpp"
 #include "door.hpp"
 #include "level.hpp"
+#include "enemy.hpp"
 
 namespace player_constants {
     const float WALK_SPEED = 0.2f;
@@ -239,6 +240,19 @@ void Player::handleDoorCollision(std::vector<Door> &others, Level &level, Graphi
             level = Level(others.at(i).getDestination(), graphics);
         }
     }
+}
+
+void Player::handleEnemiesCollision(std::vector<Enemy*> &others)
+{
+    for(int i = 0; i < others.size(); ++i)
+    {
+        others.at(i)->touchPlayer(this);
+    }
+}
+
+void Player::gainHealth(int amount)
+{
+    _currentHealth += amount;
 }
 
 void Player::update(float elapsedTime)

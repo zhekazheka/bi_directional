@@ -492,6 +492,20 @@ std::vector<Door> Level::checkDoorCollisions(const Rectangle &other)
     return others;
 }
 
+std::vector<Enemy*> Level::checkEnemiesCollisions(const Rectangle &other)
+{
+    std::vector<Enemy*> others;
+    for(int i = 0; i < _enemies.size(); ++i)
+    {
+        if(_enemies.at(i)->getBoundingBox().collideWith(other))
+        {
+            others.push_back(_enemies.at(i));
+        }
+    }
+    
+    return others;
+}
+
 const Vector2 Level::getPlayerSpawnPoint() const
 {
     return _spawnPoint;

@@ -16,6 +16,7 @@ class Graphics;
 class Slope;
 class Door;
 class Level;
+class Enemy;
 
 class Player : public AnimatedSprite
 {
@@ -42,6 +43,7 @@ public:
     void handleTileCollisions(std::vector<Rectangle> &others);
     void handleSlopeCollisions(std::vector<Slope> &others);
     void handleDoorCollision(std::vector<Door> &others, Level &level, Graphics &graphics);
+    void handleEnemiesCollision(std::vector<Enemy*> &others);
     
     const float getX() const;
     const float getY() const;
@@ -55,6 +57,8 @@ public:
     {
         return _currentHealth;
     }
+    
+    void gainHealth(int amount);
     
 private:
     float _dx, _dy;

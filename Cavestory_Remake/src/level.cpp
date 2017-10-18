@@ -21,10 +21,10 @@
 using namespace tinyxml2;
 
 namespace level_constants {
-    const std::string LEVEL_SPRITE_SHEET = "/Users/zhekazheka/Documents/HandMade/Cavestory_Remake/Cavestory_Remake/content/backgrounds/bkBlue.png";
+    const std::string LEVEL_SPRITE_SHEET = "Cavestory_Remake/content/backgrounds/bkBlue.png";
     
-    const std::string MAPS = "/Users/zhekazheka/Documents/HandMade/Cavestory_Remake/Cavestory_Remake/content/maps/";
-    const std::string TILESETS = "/Users/zhekazheka/Documents/HandMade/Cavestory_Remake/Cavestory_Remake/content/tilesets/";
+    const std::string MAPS = "Cavestory_Remake/content/maps/";
+    const std::string TILESETS = "Cavestory_Remake/content/tilesets/";
 }
 
 
